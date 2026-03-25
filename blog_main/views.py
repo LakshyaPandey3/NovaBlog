@@ -9,8 +9,8 @@ from blogs.models import Category, Blog
 
 
 def home(request):
-    featured_posts = Blog.objects.filter(is_featured=True, status='published').order_by('updated_at')
-    posts = Blog.objects.filter(is_featured=False, status='published')
+    featured_posts = Blog.objects.filter(is_featured=True, status='Published').order_by('updated_at')
+    posts = Blog.objects.filter(is_featured=False, status='Published')
 
 
     #Fetch about us
@@ -48,7 +48,7 @@ def register(request):
         'form': form,
     }
 
-    return render(request,'register.html')
+    return render(request,'register.html', context)
 
 def login(request):
     if request.method == 'POST':
@@ -56,17 +56,18 @@ def login(request):
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
-
             user = auth.authenticate(username=username, password=password)
-
             if user is not None:
                 auth.login(request, user)
-            return redirect('dashboard')
-    form = AuthenticationForm()
+                return redirect('dashboard')
+    else:
+        form = AuthenticationForm()
+
     context = {
         'form': form,
     }
-    return render(request,'login.html')
+    return render(request, 'login.html', context)
+
 
 def logout(request):
     auth.logout(request)

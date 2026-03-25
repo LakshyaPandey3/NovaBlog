@@ -16,14 +16,14 @@ def posts_by_category(request, category_id):
     category = get_object_or_404(Category, pk=category_id)
 
     context = {'posts': posts,
-               'category_id': category,
+               'category': category,
     }
-    return render(request, 'posts_by_category.html', {'posts': posts})
+    return render(request, 'posts_by_category.html', context)
 
 
 
-def blogs(request, slugs):
-    single_blog = get_object_or_404(Blog, slug=slugs, status='Published')
+def blogs(request, slug):
+    single_blog = get_object_or_404(Blog, slug=slug, status='Published')
     if request.method == 'POST':
         comment = Comment()
         comment.user = request.user

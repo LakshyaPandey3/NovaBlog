@@ -17,11 +17,13 @@ def dashboard(request):
         'blogs_count': blogs_count,
     }
 
-    return render(request, 'dashboards/dashboard.html', context)
+    return render(request, 'dashboard/dashboard.html', context)
 
 
 def categories(request):
-    return render(request, 'dashboards/categories.html')
+    categories = Category.objects.all()
+    context = {'categories': categories}
+    return render(request, 'dashboard/categories.html', context)
 
 def add_category(request):
     if request.method == 'POST':
@@ -31,7 +33,7 @@ def add_category(request):
             return redirect('categories')
     form = CategoryForm()
     context = {'form': form}
-    return render(request, 'dashboards/add_category.html', context)
+    return render(request, 'dashboard/add_category.html', context)
 
 
 def edit_category(request,pk):
@@ -44,7 +46,7 @@ def edit_category(request,pk):
     form = CategoryForm(instance=category)
     context = {'form': form,
                'category': category}
-    return render(request, 'dashboards/edit_category.html', context)
+    return render(request, 'dashboard/edit_category.html', context)
 
 
 def delete_category(request,pk):
@@ -56,7 +58,7 @@ def delete_category(request,pk):
 def posts(request):
     posts = Blog.objects.all()
     context = {'posts': posts}
-    return render(request, 'dashboards/posts.html', context)
+    return render(request, 'dashboard/posts.html', context)
 
 def add_post(request):
     if request.method == 'POST':
@@ -67,10 +69,11 @@ def add_post(request):
             post.save()
             title = form.cleaned_data['title']
             post.slug = slugify(title) + '-'+str(post.id)
+            post.save()
             return redirect('posts')
     form = BlogPostForm()
     context = {'form': form}
-    return render(request, 'dashboards/add_post.html', context)
+    return render(request, 'dashboard/add_post.html', context)
 
 
 def edit_post(request,pk):
@@ -86,7 +89,7 @@ def edit_post(request,pk):
     form = BlogPostForm(instance=post)
     context = {'form': form,
                'post': post}
-    return render(request, 'dashboards/edit_post.html', context)
+    return render(request, 'dashboard/edit_post.html', context)
 
 
 def delete_post(request,pk):
@@ -98,7 +101,7 @@ def delete_post(request,pk):
 def users(request):
     users = User.objects.all()
     context = {'users': users}
-    return render(request, 'dashboards/users.html', context)
+    return render(request, 'dashboard/users.html', context)
 
 def add_user(request):
     if request.method == 'POST':
@@ -110,7 +113,7 @@ def add_user(request):
             print(form.errors)
     form = AddUserForm()
     context = {'form': form}
-    return render(request, 'dashboards/add_user.html', context)
+    return render(request, 'dashboard/add_user.html', context)
 
 def edit_user(request,pk):
     user = get_object_or_404(User, pk=pk)
@@ -121,7 +124,7 @@ def edit_user(request,pk):
             return redirect('users')
     form = EditUserForm(instance=user)
     context = {'form': form,}
-    return render(request, 'dashboards/edit_user.html', context)
+    return render(request, 'dashboard/edit_user.html', context)
 
 
 def delete_user(request,pk):

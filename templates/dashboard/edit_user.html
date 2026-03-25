@@ -14,7 +14,7 @@
         {% if perms.auth.add_user %}
         <h2>Edit User</h2>
         
-        <form action="#" method="POST" >
+        <form action="{% url 'edit_user' form.instance.id %}" method="POST" >
             {% csrf_token %}
             {{ form | crispy }}
             <button type="submit" class="btn btn-warning">Submit</button>
